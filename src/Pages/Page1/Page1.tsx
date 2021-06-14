@@ -14,7 +14,7 @@ import {
 
 } from 'react-native';
 
-import styles from '../Styles/MStyle'
+import styles from '../../Styles/MStyle'
 
 export default function Page1() {
   
