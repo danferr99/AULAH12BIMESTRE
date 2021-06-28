@@ -16,5 +16,6 @@ export default {
     blue_light: '#EBF6FF',
   
     red: '#E83F5B',
-    redButton: '#e02041'
+    redButton: '#e02041',
+    black:'#000000'
   };

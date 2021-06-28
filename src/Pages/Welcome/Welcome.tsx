@@ -33,7 +33,7 @@ export default function Welcome() {
         <View style={styles.container}>
 
             <View style={styles.form}>
-                <Text>Seja Bem Vindo</Text>
+                <Text>BEM VINDO!!!</Text>
                 <MyButton title='Avançar' onPress={navigateToPage1} />
                 <MyButton title='Teste API' onPress={handleTestApi} />
             </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     buttonClickMe: {
         marginTop: 16,
-        backgroundColor: 'red',
+        backgroundColor: 'blue',
         borderRadius: 8,
         height: 50,
         width: '100%',
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     imcObesidadeIII: {
-        color: 'red',
+        color: 'blue',
         fontWeight: 'bold',
         fontSize: 18
     },

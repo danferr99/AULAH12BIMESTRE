@@ -1,8 +1,9 @@
 import React from 'react';
-import { createStackNavigator } from "@react-navigation/stack";
-import color from '../Styles/color';
+
+import { createStackNavigator } from '@react-navigation/stack';
+import colors from '../Styles/cores';
+import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
-import Welcome from '../Welcome/Welcome';
 import NewPaciente from '../Pages/NewPaciente/NewPaciente';
 
 const stackRoutes = createStackNavigator();
@@ -12,7 +13,7 @@ const AppRoutes: React.FC = () => (
         headerMode='none'
         screenOptions={{
             cardStyle: {
-                backgroundColor: color.white
+                backgroundColor: colors.white
             }
         }}
     >
@@ -21,21 +22,21 @@ const AppRoutes: React.FC = () => (
             name="Login"
             component={Login}
         />
+
+        <stackRoutes.Screen
+            name="Home"
+            component={Home}
+        />
+
         <stackRoutes.Screen
             name="NewPaciente"
             component={NewPaciente}
         />
-      
-        <stackRoutes.Screen
-            name="Welcome"
-            component={Welcome}
-        />
-     
-        
-       
-
 
     </stackRoutes.Navigator>
-)
+);
 
 export default AppRoutes;
+
+
+

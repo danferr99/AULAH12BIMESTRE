@@ -3,36 +3,48 @@ import {
     TextInput,
     StyleSheet,
     Text,
-    View
+    View,
+    FlatList
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import api from '../../Services/api';
 import { MyButton } from '../../Components/MyButton/MyButton';
-import colors from '../../Styles/color';
 import Loading from '../../Components/Loading/Loading';
 import { LinkButton } from '../../Components/LinkButton/LinkButton';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
+import cores from '../../Styles/cores';
 
 interface NewPacienteProps {
-    name: string,
-    document: string,
+    nome: string,
+    cpf: string,
     email: string,
-    password: string
+    senha: string
+}
+
+//type nameOfIcons = 'eye' | 'eye-off'
+
+enum nameOfIcons {
+    eye = 'eye',
+    eyeOff = 'eye-off'
 }
 
 interface PasswordConfig {
     flShowPass: boolean,
-    iconPass: string
+    iconPass: nameOfIcons
+}
+
+interface listErrors {
+    errors: string[];
 }
 
 export default function Login() {
     const [objPasswordConfig, setConfigForm] = React.useState<PasswordConfig>
-        ({ flShowPass: false, iconPass: 'eye' });
+        ({ flShowPass: false, iconPass: nameOfIcons.eye });
 
     const [objPasswordConfirmConfig, setConfigConfirmForm] = React.useState<PasswordConfig>
-        ({ flShowPass: false, iconPass: 'eye' });
+        ({ flShowPass: false, iconPass: nameOfIcons.eye });
 
 
     const [txtName, setName] = React.useState('')
@@ -42,15 +54,16 @@ export default function Login() {
     const [txtPasswordConfirm, setPasswordConfirm] = React.useState('')
     const navigation = useNavigation();
     const [flLoading, setLoading] = React.useState(false)
+    const [lstErrors, setListErrors] = React.useState<listErrors>({ errors: [] });
 
     function handleChangeIcon() {
-        let icone = objPasswordConfig.iconPass === "eye" ? "eye-off" : "eye";
+        let icone = objPasswordConfig.iconPass === nameOfIcons.eye ? nameOfIcons.eyeOff : nameOfIcons.eye;
         let flShowPass = !objPasswordConfig.flShowPass;
         setConfigForm({ iconPass: icone, flShowPass });
     }
 
     function handleChangeIconConfirm() {
-        let icone = objPasswordConfirmConfig.iconPass === "eye" ? "eye-off" : "eye";
+        let icone = objPasswordConfirmConfig.iconPass === nameOfIcons.eye ? nameOfIcons.eyeOff : nameOfIcons.eye;
         let flShowPass = !objPasswordConfirmConfig.flShowPass;
         setConfigConfirmForm({ iconPass: icone, flShowPass });
     }
@@ -59,9 +72,9 @@ export default function Login() {
     async function handlePostNewPaciente() {
 
         let objNewPaciente: NewPacienteProps = {
-            name: txtName,
-            password: txtPassword,
-            document: txtDocument,
+            nome: txtName,
+            senha: txtPassword,
+            cpf: txtDocument,
             email: txtEmail
         };
 
@@ -85,14 +98,14 @@ export default function Login() {
             alert('Senha e confirmar senha não conferem!');
             return;
         }
-
         setLoading(true);
-        const response = await api.post(`/Paciente`, objNewPaciente);
-        if (response.data.status === 201) {
-            alert('Paciente Posted!');
+        try {
+            const response = await api.post(`/paciente`, objNewPaciente);
+            alert('Paciente Criado!');
+            navigation.navigate('Home');
         }
-        else {
-            alert(`Error : ${response.data.error()}`);
+        catch (error) {
+            setListErrors({ errors: error.response.data.errors });
         }
         setLoading(false);
     }
@@ -108,7 +121,7 @@ export default function Login() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.textTitle}>Preencha seus dados!</Text>
+            <Text style={styles.textTitle}>Insira os seus dados</Text>
             <TextInput
                 style={styles.textInput}
                 placeholder="Nome"
@@ -142,9 +155,9 @@ export default function Login() {
                 />
                 <Feather
                     style={styles.iconEye}
-                    nome={objPasswordConfig.iconPass}
+                    name={objPasswordConfig.iconPass}
                     size={28}
-                    color={colors.redButton}
+                    color={cores.blue}
                     onPress={handleChangeIcon}
                 />
             </View>
@@ -159,9 +172,9 @@ export default function Login() {
                 />
                 <Feather
                     style={styles.iconEye}
-                    nome={objPasswordConfirmConfig.iconPass}
+                    name={objPasswordConfirmConfig.iconPass}
                     size={28}
-                    color={colors.redButton}
+                    color={cores.blue}
                     onPress={handleChangeIconConfirm}
                 />
             </View>
@@ -170,6 +183,18 @@ export default function Login() {
             <LinkButton title='Voltar'
                 onPress={navigateToBack}
             />
+
+            <FlatList
+
+                data={lstErrors.errors}
+                keyExtractor={error => error}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item: itemError }) => (
+                    <Text>{itemError}</Text>
+
+                )}
+            />
+
         </SafeAreaView>
 
     );
@@ -179,18 +204,21 @@ export default function Login() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: cores.background,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: '30%',
     },
     textTitle: {
-        color: 'red',
-        fontSize: 28,
-        marginBottom: 8
+        color: '#4682B4',
+        fontSize: 32,
+        marginBottom: '10%',
+        fontWeight: 'bold',
+        
     },
     textInput: {
         height: 40,
-        borderColor: colors.gray,
+        borderColor: cores.gray,
         borderRadius: 8,
         borderWidth: 1,
         width: '70%',
@@ -205,7 +233,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8
     },
     buttonIn: {
-        backgroundColor: colors.redButton,
+        backgroundColor: cores.blue,
         borderRadius: 8,
         height: 50,
         width: '70%',

@@ -2,10 +2,11 @@ import React from 'react';
 import {
     StyleSheet,
     Text,
+    View,
     TouchableOpacity,
     TouchableOpacityProps
 } from 'react-native';
-import colors from '../../Styles/color';
+import cores from '../../Styles/cores';
 
 interface ButtonProps extends TouchableOpacityProps {
     title: string
@@ -29,7 +30,7 @@ export function LinkButton({ title, ...rest }: ButtonProps) {
 
 const styles = StyleSheet.create({
     MyButtonStyle: {
-        backgroundColor: colors.white,
+        backgroundColor: cores.white,
         borderRadius: 8,
         height: 50,
         width: '70%',
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
         marginVertical: 16
     },
     MyTextButtonStyle: {
-        color: colors.redButton,
+        color: cores.blue,
         fontSize: 18,
         fontWeight: 'bold'
     },

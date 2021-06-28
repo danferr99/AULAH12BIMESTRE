@@ -3,37 +3,46 @@ import {
     TextInput,
     StyleSheet,
     Text,
-    View
+    View,
+    TouchableOpacityComponent
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import api from '../../Services/api';
 import { MyButton } from '../../Components/MyButton/MyButton';
-import colors from '../../Styles/color';
+import cores from '../../Styles/cores';
 import Loading from '../../Components/Loading/Loading';
 import { LinkButton } from '../../Components/LinkButton/LinkButton';
-import { Colors} from 'react-native/Libraries/NewAppScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 interface LoginProps {
     email: string,
     senha: string
 }
 
+enum nameOfIcons {
+    eye = 'eye',
+    eyeOff = 'eye-off'
+}
+
+
 interface PasswordConfig {
     flShowPass: boolean,
-    iconPass: string
+    iconPass: nameOfIcons
 }
 
 export default function Login() {
     const [objPasswordConfig, setConfigForm] = React.useState<PasswordConfig>
-        ({ flShowPass: false, iconPass: 'eye' });
+        ({ flShowPass: false, iconPass: nameOfIcons.eye });
     const [txtLogin, setLogin] = React.useState('')
     const [txtSenha, setSenha] = React.useState('')
     const navigation = useNavigation();
     const [flLoading, setLoading] = React.useState(false)
 
     function handleChangeIcon() {
-        let icone = objPasswordConfig.iconPass === "eye" ? "eye-off" : "eye";
+        let icone = objPasswordConfig.iconPass === nameOfIcons.eye ? nameOfIcons.eyeOff : nameOfIcons.eye;
         let flShowPass = !objPasswordConfig.flShowPass;
         setConfigForm({ iconPass: icone, flShowPass });
     }
@@ -50,13 +59,17 @@ export default function Login() {
             return;
         }
         setLoading(true);
-        const response = await api.post(`/auth`, objLogin);
-        if (response.data.auth) {
-            alert('Login e senha OK!');
-        }
-        else {
-            alert('Login e/ou senha inválidos');
-        }
+        /*    const response = await api.post(`/auth`, objLogin);
+            console.log(response.data);
+            if (response.data.auth) {
+                alert('Login e senha OK!');
+            }
+            else {
+                alert(`${response.data.message}`);
+            }*/
+
+        await AsyncStorage.setItem('@nomeApp:userName', txtLogin);
+        navigation.navigate('Home');
         setLoading(false);
     }
 
@@ -86,12 +99,13 @@ export default function Login() {
                 />
                 <Feather
                     style={styles.iconEye}
-                    nome={objPasswordConfig.iconPass}
+                    name={objPasswordConfig.iconPass}
                     size={28}
-                    color={colors.redButton}
+                    color={cores.blue}
                     onPress={handleChangeIcon}
                 />
             </View>
+
             <MyButton title='Entrar' onPress={navigateToHome}
 
             />
@@ -109,18 +123,21 @@ export default function Login() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: cores.background,
         alignItems: 'center',
         justifyContent: 'center',
     },
     textTitle: {
-        color: 'red',
+        color: '#4682B4',
         fontSize: 28,
-        marginBottom: 8
+        marginBottom: 8,
+        height: 80,
+        fontWeight: 'bold',
+        
     },
     textInput: {
         height: 40,
-        borderColor: colors.gray,
+        borderColor: cores.gray,
         borderRadius: 8,
         borderWidth: 1,
         width: '70%',
@@ -135,7 +152,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8
     },
     buttonIn: {
-        backgroundColor: colors.redButton,
+        backgroundColor: cores.blue,
         borderRadius: 8,
         height: 50,
         width: '70%',

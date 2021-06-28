@@ -1,0 +1,32 @@
+{
+    "pacientes": [
+      {
+        "id": 1,
+        "name": "H1",
+        "email": "h1@gmail",
+        "document": "123",
+        "password": "123"
+      },
+      {
+        "id": 2,
+        "name": "H2",
+        "email": "h2@gmail",
+        "document": "456",
+        "password": "123"
+      },
+      {
+        "name": "H10",
+        "email": "h10@gmail.com",
+        "document": "123",
+        "password": "123",
+        "id": 3
+      },
+      {
+        "name": "H10",
+        "email": "h10@gmail.com",
+        "document": "123",
+        "password": "123",
+        "id": 4
+      }
+    ]
+  }

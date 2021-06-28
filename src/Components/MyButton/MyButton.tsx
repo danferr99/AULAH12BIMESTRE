@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     TouchableOpacityProps
 } from 'react-native';
-import colors from '../../Styles/color';
+import cores from '../../Styles/cores';
 
 interface ButtonProps extends TouchableOpacityProps {
     title: string
@@ -30,7 +30,7 @@ export function MyButton({ title, ...rest }: ButtonProps) {
 
 const styles = StyleSheet.create({
     MyButtonStyle: {
-        backgroundColor: colors.redButton,
+        backgroundColor: cores.blue,
         borderRadius: 8,
         height: 50,
         width: '70%',
